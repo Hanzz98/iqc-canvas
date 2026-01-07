@@ -1,18 +1,19 @@
 {
     "name": "iqc-canvas",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "Screenshot Iphone WhatsApp Chat Generator by Hann Universe",
     "main": "index.js",
     "files": [
         "iqc.js",
         "assets/",
-        "lib/"
+        "lib/",
+        "README.md"
     ],
     "type": "commonjs",
     "scripts": {
         "start": "node index.js"
     },
-    "keywords": [],
+    "keywords": ["canvas", "iqc", "hannuniverse"],
     "author": "hannuniverse",
     "license": "MIT",
     "dependencies": {
