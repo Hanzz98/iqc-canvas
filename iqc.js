@@ -580,14 +580,14 @@ async function generateIQC(text, time, opts = {}) {
 
 	let rbWidth = 0;
 	if (showReactionBar) {
-  if (reactionEmojis.length < 7) {
-  if (showPlusBtn) {
-    const slot7CenterX = RB_PAD + RB_EMOJI_SZ / 2 + 6 * EMOJI_SPACING;
-    rbWidth = slot7CenterX + PLUS_RADIUS + RB_PAD;
-  } else {
-    rbWidth = RB_PAD + RB_EMOJI_SZ / 2 + (reactionEmojis.length - 1) * EMOJI_SPACING + RB_EMOJI_SZ / 2 + RB_PAD;
-  }
-  } else {
+		if (reactionEmojis.length < 7) {
+			if (showPlusBtn) {
+				const slot7CenterX = RB_PAD + RB_EMOJI_SZ / 2 + 6 * EMOJI_SPACING;
+				rbWidth = slot7CenterX + PLUS_RADIUS + RB_PAD;
+			} else {
+				rbWidth = RB_PAD + RB_EMOJI_SZ / 2 + (reactionEmojis.length - 1) * EMOJI_SPACING + RB_EMOJI_SZ / 2 + RB_PAD;
+			}
+		} else {
 			const emojiAreaWidth = 6 * EMOJI_SPACING + RB_EMOJI_SZ;
 			rbWidth = RB_PAD + emojiAreaWidth + PLUS_GAP + PLUS_DIAMETER + RB_PAD;
 		}
@@ -681,21 +681,21 @@ async function generateIQC(text, time, opts = {}) {
 			const arm = 7;
 
 			if (reactionEmojis.length >= 7) {
-  ctx.save();
-  ctx.beginPath();
-  ctx.rect(0, plusCY - PLUS_RADIUS, plusCX, PLUS_RADIUS * 2);
-  ctx.clip();
-  ctx.filter = 'drop-shadow(-4px 0px 4px rgba(0,0,0,0.8))';
-  ctx.beginPath();
-  ctx.arc(plusCX, plusCY, PLUS_RADIUS, 0, Math.PI * 2);
-  ctx.fillStyle = '#4A4E4D';
-  ctx.fill();
-  ctx.filter = 'none';
-  ctx.restore();
-}
+				ctx.save();
+				ctx.beginPath();
+				ctx.rect(0, plusCY - PLUS_RADIUS, plusCX, PLUS_RADIUS * 2);
+				ctx.clip();
+				ctx.filter = 'drop-shadow(-4px 0px 4px rgba(0,0,0,0.8))';
+				ctx.beginPath();
+				ctx.arc(plusCX, plusCY, PLUS_RADIUS, 0, Math.PI * 2);
+				ctx.fillStyle = '#4A4E4D';
+				ctx.fill();
+				ctx.filter = 'none';
+				ctx.restore();
+			}
 
-ctx.beginPath();
-ctx.arc(plusCX, plusCY, PLUS_RADIUS, 0, Math.PI * 2);
+			ctx.beginPath();
+			ctx.arc(plusCX, plusCY, PLUS_RADIUS, 0, Math.PI * 2);
 			ctx.fillStyle = '#4A4E4D';
 			ctx.fill();
 			ctx.strokeStyle = '#272B2A';
