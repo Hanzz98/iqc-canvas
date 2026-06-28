@@ -82,7 +82,10 @@ async function preloadEmojis(text) {
 	}
 
 	await Promise.all(promises);
-	return { emojis, emojiCache };
+	return {
+		emojis,
+		emojiCache
+	};
 }
 
 async function preloadReactionEmojis(emojiList) {
@@ -197,7 +200,12 @@ async function drawStickerChat(ctx, stickerImg, time, bubbleY = 300, reply = nul
 	ctx.textAlign = 'left';
 
 	const totalH = (currentY - bubbleY) + STICKER_SIZE + 8 + timeH;
-	return { bubbleWidth: STICKER_SIZE, bubbleHeight: totalH, bubbleX, bubbleY };
+	return {
+		bubbleWidth: STICKER_SIZE,
+		bubbleHeight: totalH,
+		bubbleX,
+		bubbleY
+	};
 }
 
 function getTextSegments(text, emojis) {
@@ -210,7 +218,10 @@ function getTextSegments(text, emojis) {
 		if (currentIndex < emoji.offset) {
 			const textBefore = text.substring(currentIndex, emoji.offset);
 			for (const char of textBefore) {
-				segments.push({ type: 'text', value: char });
+				segments.push({
+					type: 'text',
+					value: char
+				});
 			}
 		}
 
@@ -226,7 +237,10 @@ function getTextSegments(text, emojis) {
 	if (currentIndex < text.length) {
 		const remaining = text.substring(currentIndex);
 		for (const char of remaining) {
-			segments.push({ type: 'text', value: char });
+			segments.push({
+				type: 'text',
+				value: char
+			});
 		}
 	}
 
@@ -259,7 +273,10 @@ function drawReplyBlock(ctx, reply, bubbleX, startY, bubbleWidth) {
 				currentLine = testLine;
 			} else {
 				if (ctx.measureText(word).width > maxWidth) {
-					if (currentLine) { lines.push(currentLine); currentLine = ''; }
+					if (currentLine) {
+						lines.push(currentLine);
+						currentLine = '';
+					}
 					if (lines.length >= MAX_LINES) break;
 
 					let charLine = '';
@@ -309,24 +326,24 @@ function drawReplyBlock(ctx, reply, bubbleX, startY, bubbleWidth) {
 	ctx.roundRect(blockX, startY, BORDER_W, REPLY_H, [8, 0, 0, 8]);
 	ctx.fill();
 
-const totalLines = replyLines.length;
-const t = (totalLines - 1) / (MAX_LINES - 1);
+	const totalLines = replyLines.length;
+	const t = (totalLines - 1) / (MAX_LINES - 1);
 
-const senderRatio = 0.41 - t * (0.41 - 0.28);
-const textGapRatio = 0.36 - t * (0.36 - 0.22);
+	const senderRatio = 0.41 - t * (0.41 - 0.28);
+	const textGapRatio = 0.36 - t * (0.36 - 0.22);
 
-ctx.fillStyle = ACCENT;
-ctx.font = 'bold 20px SFPRODISPLAYREGULAR';
-ctx.fillText(reply.sender, blockX + BORDER_W + REPLY_PAD, startY + REPLY_H * senderRatio);
+	ctx.fillStyle = ACCENT;
+	ctx.font = 'bold 20px SFPRODISPLAYREGULAR';
+	ctx.fillText(reply.sender, blockX + BORDER_W + REPLY_PAD, startY + REPLY_H * senderRatio);
 
-ctx.fillStyle = '#cccccc';
-ctx.font = '18px SFPRODISPLAYREGULAR';
-for (let i = 0; i < replyLines.length; i++) {
-	ctx.fillText(
-		replyLines[i],
-		blockX + BORDER_W + REPLY_PAD,
-		startY + REPLY_H * senderRatio + REPLY_H * textGapRatio + i * LINE_H
-	);
+	ctx.fillStyle = '#cccccc';
+	ctx.font = '18px SFPRODISPLAYREGULAR';
+	for (let i = 0; i < replyLines.length; i++) {
+		ctx.fillText(
+			replyLines[i],
+			blockX + BORDER_W + REPLY_PAD,
+			startY + REPLY_H * senderRatio + REPLY_H * textGapRatio + i * LINE_H
+		);
 	}
 
 	return REPLY_H;
@@ -345,51 +362,58 @@ function measureBubble(ctx, text, emojis, rbWidth, reply) {
 	let REPLY_H = 0;
 
 	if (reply) {
-	ctx.font = 'bold 20px SFPRODISPLAYREGULAR';
-	const senderW = ctx.measureText(reply.sender).width;
+		ctx.font = 'bold 20px SFPRODISPLAYREGULAR';
+		const senderW = ctx.measureText(reply.sender).width;
 
-	ctx.font = '18px SFPRODISPLAYREGULAR';
-	const approxMaxW = maxBubbleWidth - 80 - 4 - 24;
+		ctx.font = '18px SFPRODISPLAYREGULAR';
+		const approxMaxW = maxBubbleWidth - 80 - 4 - 24;
 
-	function countLines(text, maxWidth) {
-		const words = text.split(' ');
-		const lines = [];
-		let cur = '';
-		for (const word of words) {
-			if (lines.length >= MAX_LINES) break;
-			const test = cur ? cur + ' ' + word : word;
-			if (ctx.measureText(test).width <= maxWidth) {
-				cur = test;
-			} else {
-				if (ctx.measureText(word).width > maxWidth) {
-					if (cur) { lines.push(cur); cur = ''; }
-					if (lines.length >= MAX_LINES) break;
-					let cl = '';
-					for (const ch of word) {
-						if (lines.length >= MAX_LINES) break;
-						if (ctx.measureText(cl + ch).width <= maxWidth) { cl += ch; }
-						else { if (cl) lines.push(cl); cl = ch; }
-					}
-					cur = cl;
+		function countLines(text, maxWidth) {
+			const words = text.split(' ');
+			const lines = [];
+			let cur = '';
+			for (const word of words) {
+				if (lines.length >= MAX_LINES) break;
+				const test = cur ? cur + ' ' + word : word;
+				if (ctx.measureText(test).width <= maxWidth) {
+					cur = test;
 				} else {
-					if (cur) lines.push(cur);
-					cur = word;
+					if (ctx.measureText(word).width > maxWidth) {
+						if (cur) {
+							lines.push(cur);
+							cur = '';
+						}
+						if (lines.length >= MAX_LINES) break;
+						let cl = '';
+						for (const ch of word) {
+							if (lines.length >= MAX_LINES) break;
+							if (ctx.measureText(cl + ch).width <= maxWidth) {
+								cl += ch;
+							} else {
+								if (cl) lines.push(cl);
+								cl = ch;
+							}
+						}
+						cur = cl;
+					} else {
+						if (cur) lines.push(cur);
+						cur = word;
+					}
 				}
 			}
+			if (cur && lines.length < MAX_LINES) lines.push(cur);
+			return lines.length;
 		}
-		if (cur && lines.length < MAX_LINES) lines.push(cur);
-		return lines.length;
+
+		const lineCount = countLines(reply.text || '', approxMaxW);
+		REPLY_H = 28 + lineCount * LINE_H + 12 + 12;
+
+		const replyTextW = ctx.measureText(reply.text || '').width;
+		const replyContentW = Math.min(Math.max(senderW, replyTextW), maxBubbleWidth - 80) + 80;
+		minBubbleWidth = Math.min(senderW + 80, 260);
+
+		ctx.font = '24px SFPRODISPLAYREGULAR';
 	}
-
-	const lineCount = countLines(reply.text || '', approxMaxW);
-	REPLY_H = 28 + lineCount * LINE_H + 12 + 12;
-
-	const replyTextW = ctx.measureText(reply.text || '').width;
-	const replyContentW = Math.min(Math.max(senderW, replyTextW), maxBubbleWidth - 80) + 80;
-	minBubbleWidth = replyContentW;
-
-	ctx.font = '24px SFPRODISPLAYREGULAR';
-}
 
 	const segments = getTextSegments(text, emojis);
 
@@ -397,23 +421,38 @@ function measureBubble(ctx, text, emojis, rbWidth, reply) {
 		return seg.type === 'emoji' ? fontSize * 1.22 : ctx.measureText(seg.value).width;
 	}
 
-	let lines = [], currentLine = [], currentWidth = 0, currentWord = [], currentWordWidth = 0;
+	let lines = [],
+		currentLine = [],
+		currentWidth = 0,
+		currentWord = [],
+		currentWordWidth = 0;
 
 	for (const segment of segments) {
 		const segW = measureSegment(segment);
 		if (segment.type === 'text' && (segment.value === ' ' || segment.value === '\n')) {
 			if (currentWidth + currentWordWidth > maxBubbleWidth - padding) {
 				if (currentLine.length > 0) lines.push(currentLine);
-				currentLine = [...currentWord]; currentWidth = currentWordWidth;
+				currentLine = [...currentWord];
+				currentWidth = currentWordWidth;
 			} else {
-				currentLine.push(...currentWord); currentWidth += currentWordWidth;
+				currentLine.push(...currentWord);
+				currentWidth += currentWordWidth;
 			}
-			currentWord = []; currentWordWidth = 0;
+			currentWord = [];
+			currentWordWidth = 0;
 			if (segment.value === ' ' && currentWidth + segW <= maxBubbleWidth - padding) {
-				currentLine.push(segment); currentWidth += segW;
+				currentLine.push(segment);
+				currentWidth += segW;
 			}
-			if (segment.value === '\n') { lines.push(currentLine); currentLine = []; currentWidth = 0; }
-		} else { currentWord.push(segment); currentWordWidth += segW; }
+			if (segment.value === '\n') {
+				lines.push(currentLine);
+				currentLine = [];
+				currentWidth = 0;
+			}
+		} else {
+			currentWord.push(segment);
+			currentWordWidth += segW;
+		}
 	}
 
 	if (currentWord.length > 0) {
@@ -434,9 +473,14 @@ function measureBubble(ctx, text, emojis, rbWidth, reply) {
 	}
 
 	const bubbleWidth = Math.max(minBubbleWidth, Math.min(maxBubbleWidth, maxLineWidth + padding + 58));
-	const bubbleHeight = Math.max(60, lines.length * lineHeight + 22) + REPLY_H;
+	const B = reply ? 12 : 22;
+	const bubbleHeight = Math.max(60, lines.length * lineHeight + B) + REPLY_H;
 
-	return { bubbleWidth, bubbleHeight, lines };
+	return {
+		bubbleWidth,
+		bubbleHeight,
+		lines
+	};
 }
 
 function drawBubbleChat(ctx, text, time, emojis, emojiCache, bubbleY = 300, reply = null, rbWidth = 0) {
@@ -445,10 +489,14 @@ function drawBubbleChat(ctx, text, time, emojis, emojiCache, bubbleY = 300, repl
 	const fontSize = 24;
 	const lineHeight = 48;
 
-	const { bubbleWidth, bubbleHeight, lines } = measureBubble(ctx, text, emojis, rbWidth, reply);
+	const {
+		bubbleWidth,
+		bubbleHeight,
+		lines
+	} = measureBubble(ctx, text, emojis, rbWidth, reply);
 
-	const REPLY_H = reply ? (bubbleHeight - Math.max(60, lines.length * lineHeight + 22)) : 0;
-
+	const B = reply ? 12 : 22;
+	const REPLY_H = reply ? (bubbleHeight - Math.max(60, lines.length * lineHeight + B)) : 0;
 	const bubbleX = 22;
 	const radius = 26;
 
@@ -472,7 +520,7 @@ function drawBubbleChat(ctx, text, time, emojis, emojiCache, bubbleY = 300, repl
 	}
 
 	ctx.fillStyle = '#ffffff';
-	let y = bubbleY + 40 + REPLY_H;
+	let y = bubbleY + (reply ? 30 : 40) + REPLY_H;
 
 	for (const line of lines) {
 		let x = bubbleX + 24;
@@ -498,7 +546,12 @@ function drawBubbleChat(ctx, text, time, emojis, emojiCache, bubbleY = 300, repl
 	ctx.fillText(time, bubbleX + bubbleWidth - 14, bubbleY + bubbleHeight - 8);
 	ctx.textAlign = 'left';
 
-	return { bubbleWidth, bubbleHeight, bubbleX, bubbleY };
+	return {
+		bubbleWidth,
+		bubbleHeight,
+		bubbleX,
+		bubbleY
+	};
 }
 
 async function generateIQC(text, time, opts = {}) {
@@ -508,8 +561,7 @@ async function generateIQC(text, time, opts = {}) {
 	const height = 1209;
 
 	const reactionEmojis = opts.reactionEmojis !== undefined ?
-		opts.reactionEmojis :
-		['👍', '❤️', '😂', '😮', '😢', '🙏', '🤦'];
+		opts.reactionEmojis : ['👍', '❤️', '😂', '😮', '😢', '🙏', '🤦'];
 
 	if (reactionEmojis.length !== 6 && reactionEmojis.length !== 7)
 		throw new Error(`Reaction emoji harus tepat 6 atau 7. Kamu memasukkan ${reactionEmojis.length}.`);
@@ -528,16 +580,23 @@ async function generateIQC(text, time, opts = {}) {
 
 	let rbWidth = 0;
 	if (showReactionBar) {
-		if (reactionEmojis.length < 7) {
-			const slot7CenterX = RB_PAD + RB_EMOJI_SZ / 2 + 6 * EMOJI_SPACING;
-			rbWidth = slot7CenterX + PLUS_RADIUS + RB_PAD;
-		} else {
+  if (reactionEmojis.length < 7) {
+  if (showPlusBtn) {
+    const slot7CenterX = RB_PAD + RB_EMOJI_SZ / 2 + 6 * EMOJI_SPACING;
+    rbWidth = slot7CenterX + PLUS_RADIUS + RB_PAD;
+  } else {
+    rbWidth = RB_PAD + RB_EMOJI_SZ / 2 + (reactionEmojis.length - 1) * EMOJI_SPACING + RB_EMOJI_SZ / 2 + RB_PAD;
+  }
+  } else {
 			const emojiAreaWidth = 6 * EMOJI_SPACING + RB_EMOJI_SZ;
 			rbWidth = RB_PAD + emojiAreaWidth + PLUS_GAP + PLUS_DIAMETER + RB_PAD;
 		}
 	}
 
-	const [{ emojis, emojiCache }, reactionCache, icons] = await Promise.all([
+	const [{
+		emojis,
+		emojiCache
+	}, reactionCache, icons] = await Promise.all([
 		preloadEmojis(text),
 		showReactionBar ? preloadReactionEmojis(reactionEmojis) : Promise.resolve(new Map()),
 		loadIcons(),
@@ -557,9 +616,9 @@ async function generateIQC(text, time, opts = {}) {
 
 	const menuY = height - MENU_H - 10;
 
-	const estimatedBubbleH = opts.sticker
-		? stickerBubbleH
-		: measureBubble(createCanvas(width, height).getContext('2d'), text, emojis, rbWidth, opts.reply || null).bubbleHeight;
+	const estimatedBubbleH = opts.sticker ?
+		stickerBubbleH :
+		measureBubble(createCanvas(width, height).getContext('2d'), text, emojis, rbWidth, opts.reply || null).bubbleHeight;
 
 	const bubbleY = menuY - estimatedBubbleH - 10;
 	const rbX = 20;
@@ -573,8 +632,10 @@ async function generateIQC(text, time, opts = {}) {
 		'assets', 'background.png'
 	));
 	const scale = 1.05;
-	const bsw = width * scale, bsh = height * scale;
-	const box = (width - bsw) / 2, boy = (height - bsh) / 2;
+	const bsw = width * scale,
+		bsh = height * scale;
+	const box = (width - bsw) / 2,
+		boy = (height - bsh) / 2;
 
 	ctx.save();
 	ctx.rect(0, 0, width, height);
@@ -613,26 +674,28 @@ async function generateIQC(text, time, opts = {}) {
 
 		if (showPlusBtn) {
 			const lastEmojiRight = rbX + RB_PAD + (reactionEmojis.length - 1) * EMOJI_SPACING + RB_EMOJI_SZ;
-			const plusCX = reactionEmojis.length < 7
-				? rbX + RB_PAD + RB_EMOJI_SZ / 2 + 6 * EMOJI_SPACING
-				: lastEmojiRight + PLUS_GAP + PLUS_RADIUS;
+			const plusCX = reactionEmojis.length < 7 ?
+				rbX + RB_PAD + RB_EMOJI_SZ / 2 + 6 * EMOJI_SPACING :
+				lastEmojiRight + PLUS_GAP + PLUS_RADIUS;
 			const plusCY = rbY + RB_HEIGHT / 2;
 			const arm = 7;
 
-			ctx.save();
-			ctx.beginPath();
-			ctx.rect(0, plusCY - PLUS_RADIUS, plusCX, PLUS_RADIUS * 2);
-			ctx.clip();
-			ctx.filter = 'drop-shadow(-4px 0px 4px rgba(0,0,0,0.8))';
-			ctx.beginPath();
-			ctx.arc(plusCX, plusCY, PLUS_RADIUS, 0, Math.PI * 2);
-			ctx.fillStyle = '#4A4E4D';
-			ctx.fill();
-			ctx.filter = 'none';
-			ctx.restore();
+			if (reactionEmojis.length >= 7) {
+  ctx.save();
+  ctx.beginPath();
+  ctx.rect(0, plusCY - PLUS_RADIUS, plusCX, PLUS_RADIUS * 2);
+  ctx.clip();
+  ctx.filter = 'drop-shadow(-4px 0px 4px rgba(0,0,0,0.8))';
+  ctx.beginPath();
+  ctx.arc(plusCX, plusCY, PLUS_RADIUS, 0, Math.PI * 2);
+  ctx.fillStyle = '#4A4E4D';
+  ctx.fill();
+  ctx.filter = 'none';
+  ctx.restore();
+}
 
-			ctx.beginPath();
-			ctx.arc(plusCX, plusCY, PLUS_RADIUS, 0, Math.PI * 2);
+ctx.beginPath();
+ctx.arc(plusCX, plusCY, PLUS_RADIUS, 0, Math.PI * 2);
 			ctx.fillStyle = '#4A4E4D';
 			ctx.fill();
 			ctx.strokeStyle = '#272B2A';
@@ -656,19 +719,52 @@ async function generateIQC(text, time, opts = {}) {
 	let bubbleWidth, bubbleHeight;
 	if (opts.sticker) {
 		const stickerImg = await validateSticker(opts.sticker);
-		({ bubbleWidth, bubbleHeight } = await drawStickerChat(ctx, stickerImg, time, bubbleY, reply));
+		({
+			bubbleWidth,
+			bubbleHeight
+		} = await drawStickerChat(ctx, stickerImg, time, bubbleY, reply));
 	} else {
-		({ bubbleWidth, bubbleHeight } = drawBubbleChat(ctx, text, time, emojis, emojiCache, bubbleY, reply, rbWidth));
+		({
+			bubbleWidth,
+			bubbleHeight
+		} = drawBubbleChat(ctx, text, time, emojis, emojiCache, bubbleY, reply, rbWidth));
 	}
 
-	const menuItems = [
-		{ text: 'Balas', icon: icons.reply, color: '#ffffff' },
-		{ text: 'Teruskan', icon: icons.forward, color: '#ffffff' },
-		{ text: 'Salin', icon: icons.copy, color: '#ffffff' },
-		{ text: 'Beri Bintang', icon: icons.star, color: '#ffffff' },
-		{ text: 'Info', icon: icons.info, color: '#ffffff' },
-		{ text: 'Laporkan', icon: icons.report, color: '#ffffff' },
-		{ text: 'Hapus', icon: icons.trash, color: '#ff3b30' },
+	const menuItems = [{
+			text: 'Balas',
+			icon: icons.reply,
+			color: '#ffffff'
+		},
+		{
+			text: 'Teruskan',
+			icon: icons.forward,
+			color: '#ffffff'
+		},
+		{
+			text: 'Salin',
+			icon: icons.copy,
+			color: '#ffffff'
+		},
+		{
+			text: 'Beri Bintang',
+			icon: icons.star,
+			color: '#ffffff'
+		},
+		{
+			text: 'Info',
+			icon: icons.info,
+			color: '#ffffff'
+		},
+		{
+			text: 'Laporkan',
+			icon: icons.report,
+			color: '#ffffff'
+		},
+		{
+			text: 'Hapus',
+			icon: icons.trash,
+			color: '#ff3b30'
+		},
 	];
 
 	const ICON_SZ = 42;
