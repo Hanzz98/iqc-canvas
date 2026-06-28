@@ -1,19 +1,38 @@
 {
     "name": "iqc-canvas",
-    "version": "1.0.2",
-    "description": "Screenshot Iphone WhatsApp Chat Generator by Hann Universe",
-    "main": "index.js",
+    "version": "1.0.31",
+    "description": "Screenshot iPhone WhatsApp Chat Generator by Hann Universe",
+    "main": "./dist/index.cjs",
+    "module": "./dist/index.mjs",
+    "exports": {
+        ".": {
+            "require": "./dist/index.cjs",
+            "import": "./dist/index.mjs"
+        }
+    },
+    "type": "commonjs",
     "files": [
-        "iqc.js",
-        "assets/",
-        "lib/",
+        "dist",
+        "assets",
+        "lib",
         "README.md"
     ],
-    "type": "commonjs",
     "scripts": {
-        "start": "node index.js"
+        "start": "node index.js",
+        "build": "node build.js",
+        "prepublishOnly": "npm run build",
+        "test:cjs": "node -e \"const {generateIQC} = require('./dist/index.cjs'); console.log('\u2705 CJS OK')\"",
+        "test:esm": "node --input-type=module -e \"import('./dist/index.mjs').then(m => console.log('\u2705 ESM OK'))\""
     },
-    "keywords": ["canvas", "iqc", "hannuniverse"],
+    "keywords": [
+        "canvas",
+        "iqc",
+        "whatsapp",
+        "iphone",
+        "ios",
+        "quote",
+        "image-generator"
+    ],
     "author": "hannuniverse",
     "license": "MIT",
     "dependencies": {
@@ -21,7 +40,18 @@
         "emoji-db": "^15.1.2",
         "fs": "0.0.1-security"
     },
+    "devDependencies": {
+        "esbuild": "^0.19.0"
+    },
     "engines": {
         "node": ">=14.0.0"
-    }
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/hannuniverse/iqc-canvas.git"
+    },
+    "bugs": {
+        "url": "https://github.com/hannuniverse/iqc-canvas/issues"
+    },
+    "homepage": "https://github.com/hannuniverse/iqc-canvas#readme"
 }

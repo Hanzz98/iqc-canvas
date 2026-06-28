@@ -1,5 +1,2 @@
-const { generateIQC } = require("./iqc.js");
-
-module.exports = {
-  generateIQC
-};
+const { generateIQC } = require('./iqc.js');
+module.exports = { generateIQC };
