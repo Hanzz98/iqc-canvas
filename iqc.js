@@ -5,12 +5,12 @@ const {
 } = require('@napi-rs/canvas');
 const fs = require('fs');
 const EmojiDbLib = require('emoji-db');
-const emojiImageByBrand = require('./lib/emoji-image');
+const emojiImageByBrand = require('../../lib/emoji-image');
 const path = require('path');
 
 const FONT_PATH = path.join(
 	typeof __dirname !== 'undefined' ? __dirname : process.cwd(),
-	'assets', 'SFPRODISPLAYREGULAR.otf'
+	'..', '..', 'assets', 'SFPRODISPLAYREGULAR.otf'
 );
 GlobalFonts.registerFromPath(FONT_PATH, 'SFPRODISPLAYREGULAR');
 
@@ -629,7 +629,7 @@ async function generateIQC(text, time, opts = {}) {
 
 	const bgImg = await loadImage(path.join(
 		typeof __dirname !== 'undefined' ? __dirname : process.cwd(),
-		'assets', 'background.png'
+		'..', '..', 'assets', 'background.png'
 	));
 	const scale = 1.05;
 	const bsw = width * scale,
@@ -813,6 +813,4 @@ async function generateIQC(text, time, opts = {}) {
 	};
 }
 
-module.exports = {
-	generateIQC
-};
+exports.generateIQC = generateIQC;
